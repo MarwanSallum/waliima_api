@@ -13,20 +13,6 @@ class AdminAuthController extends Controller
 {
     use ApiGeneralTrait;
 
-    public function register(Request  $request){
-
-        $admin = Admin::create([
-            'name' => $request -> name,
-            'email' => $request -> email,
-            'mobile' => $request -> mobile,
-            'password' => bcrypt($request -> password),
-            
-        ]);
-        $admin -> attachRole('admin');
-       //return user
-        return $this -> returnData('admin' , $admin);
-    }
-
     public function login(Request  $request){
         try {
             $rules = [
@@ -52,14 +38,18 @@ class AdminAuthController extends Controller
                return $this->returnError('E001','بيانات الدخول غير صحيحة');
 
              $admin = Auth::guard('admin-api') -> user();
-             $admin -> api_token = $token;
-            //return token
-             return $this -> returnData('user' , $admin);
+             return $this -> respondWithToken($admin , $token);
 
         }catch (\Exception $ex){
             return $this->returnError($ex->getCode(), $ex->getMessage());
         }
 
 
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json(['message'=>'تم تسجيل الخروج بنجاح']);
     }
 }

@@ -15,10 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'api', 'namespace' => 'Api\Admin'], function () {
     Route::get('login', 'AdminAuthController@login');
-    Route::post('register', 'AdminAuthController@register');
 });
 
 Route::group(['middleware' => ['api','checkUserToken:admin-api'],'namespace' => 'Api\Admin'], function () {
-
+    Route::post('logout','AdminAuthController@logout');
 
 });

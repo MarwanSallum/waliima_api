@@ -13,15 +13,28 @@ class AuthController extends Controller
 {
     use ApiGeneralTrait;
 
-    public function register(Request  $request){
+    public $loginAfterSignUp = true;
+
+    public function register(Request $request)
+    {
+        $mobile = $request -> mobile;
+
+        $checkExistUser = User::where('mobile', $mobile)
+        ->first();
+
+        if($checkExistUser){
+            return $this -> returnError(301, 'هذا المستخدم مسجل مسبقا');
+        }
 
         $user = User::create([
-            'name' => $request -> name,
-            'mobile' => $request -> mobile,
-            'password' => bcrypt($request -> password),
-        ]);
-       //return user
-        return $this -> returnData('user' , $user);
+        'name' => $request->name,
+        'mobile' => $request->mobile,
+        'password' => bcrypt($request->password),
+    ]);
+
+    $token = auth()->login($user);
+
+    return $this->respondWithToken($user,$token);
     }
 
     public function login(Request  $request){
@@ -41,22 +54,24 @@ class AuthController extends Controller
 
             //login
 
-             $credentials = $request -> only(['mobile','password']) ;
+            $credentials = $request -> only(['mobile','password']) ;
 
-           $token =  Auth::guard('user-api') -> attempt($credentials);
-
-           if(!$token)
-               return $this->returnError('E001','بيانات الدخول غير صحيحة');
-
-             $user = Auth::guard('user-api') -> user();
-             $user -> api_token = $token;
-            //return token
-             return $this -> returnData('user' , $user);
+        $token =  Auth::guard('user-api') -> attempt($credentials);
+        if(!$token)
+            return $this->returnError('E001','بيانات الدخول غير صحيحة');
+            $user = Auth::guard('user-api') -> user();
+            return $this -> respondWithToken($user , $token);
 
         }catch (\Exception $ex){
             return $this->returnError($ex->getCode(), $ex->getMessage());
         }
 
 
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json(['message'=>'تم تسجيل الخروج بنجاح']);
     }
 }

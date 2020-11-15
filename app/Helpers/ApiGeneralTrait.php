@@ -33,6 +33,16 @@ trait ApiGeneralTrait
 
     }
 
+    protected function respondWithToken($user,$token)
+    {
+      return response()->json([
+        'user' => $user,
+        'access_token' => $token,
+        'token_type' => 'bearer',
+        'expires_in' => auth()->factory()->getTTL() * 60
+      ]);
+    }
+
     function uploadImage($folder, $image){
         $image -> store('/', $folder);
         $filename = $image -> hashName();

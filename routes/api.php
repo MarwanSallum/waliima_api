@@ -18,7 +18,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api\User'], function () {
     Route::post('register', 'AuthController@register');
 });
 
-Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => 'AUser'], function () {
+Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => 'Api\User'], function () {
+    Route::post('logout','AuthController@logout');
 
 });
 
