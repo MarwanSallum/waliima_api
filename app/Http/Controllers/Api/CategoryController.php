@@ -17,7 +17,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-     $this->middleware('auth:api');
+     $this->middleware('auth:api')->except(['index']);
     }
  /**
   * Undocumented function
@@ -26,11 +26,8 @@ class CategoryController extends Controller
   */ 
     public function index()
     {
-            if(auth() ->user()-> hasRole('super_admin')){
                 $categories = Category::paginate(5);
                 return CategoryResource::collection($categories);
-            }
-            return $this -> returnError(401, 'أنت غير مخول لعرض هذا المحتوى');
     }
 
 
