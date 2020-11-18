@@ -24,8 +24,8 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'image' => 'required',
+            'name' => 'required|unique:categories,name,'. $this -> id,
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -33,6 +33,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name.required' => 'يجب إدخال إسم القسم',
+            'name.unique' => 'هذا القسم موجود بالفعل',
             'image.required' => 'يجب إرفاق صورة للقسم',
 
         ];

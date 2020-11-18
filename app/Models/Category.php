@@ -16,7 +16,13 @@ class Category extends Model
         return $query -> select('id', 'name', 'image');
     }
 
-    public function admin(){
-        return $this->belongsTo(Admin::class);
+    public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset('assets/' . $val) : "";
+
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

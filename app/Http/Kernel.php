@@ -42,6 +42,13 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
+        'CheckRole' => [
+            \App\Http\Middleware\CheckRole::class,
+            \Illuminate\Auth\Middleware\Authenticate::class,
+        ],
+
+        
     ];
 
     /**

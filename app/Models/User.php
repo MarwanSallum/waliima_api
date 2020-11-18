@@ -39,9 +39,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email','mobile', 'password', 'location', 'avatar'
-    ];
+    protected $guarded =[];
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -60,4 +59,8 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function categories(){
+        return $this -> hasMany(Category::class);
+    }
 }

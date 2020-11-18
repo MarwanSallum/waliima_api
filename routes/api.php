@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     Route::post('register', 'AuthController@register');
-    Route::post('login', 'AuthController@login');
+    Route::post('login', 'AuthController@login')->name('json.login');
 
 });
 
@@ -23,8 +23,13 @@ Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => '
     Route::get('logout', 'AuthController@logout');
     Route::get('user', 'AuthController@getAuthUser');
     
-    Route::apiResource('categories', 'CategoryController@index');
+    ///////////////////// ADMIN SECTION ////////////////////////
+
+    /////////////////////  Category Route ///////////////////////
+    Route::get('categories', 'CategoryController@index');
     Route::post('add-category', 'CategoryController@store');
+    Route::post('delete-category/{id}', 'CategoryController@destroy');
+    ///////////////////  End Category Route /////////////////////
 
 });
 

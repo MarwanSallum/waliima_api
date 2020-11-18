@@ -28,7 +28,7 @@ class AuthController extends Controller
       $credentials = $request->only(['email', 'password']);
 
       if (!$token = auth()->attempt($credentials)) {
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'غير مسجل'], 401);
       }
 
       return $this->respondWithToken($token);
@@ -38,7 +38,7 @@ class AuthController extends Controller
     }
     public function logout(){
         auth()->logout();
-        return response()->json(['message'=>'Successfully logged out']);
+        return response()->json(['message'=>'تم تسجيل الخروج بنجاح']);
     }
     protected function respondWithToken($token){
       return response()->json([
