@@ -15,13 +15,31 @@ class RolesTableSeeder extends Seeder
         $superAdmin = Role::create([
             'name' => 'super_admin',
             'display_name' => 'super admin',
-            'description' => 'can do anything in system',
+            'description' => 'Can do anything in system',
         ]);
 
         $admin = Role::create([
             'name' => 'admin',
             'display_name' => 'admin',
-            'description' => 'can do specific tasks',
+            'description' => 'Can do specific tasks',
+        ]);
+
+        $slaughterhouse = Role::create([
+            'name' => 'slaughterhouse',
+            'display_name' => 'slaughterhouse',
+            'description' => 'Responsible for receiving and preparing the order',
+        ]);
+
+        $delivery_boy = Role::create([
+            'name' => 'delivery_boy',
+            'display_name' => 'delivery boy',
+            'description' => 'Specialist in delivering the order to the application user',
+        ]);
+
+        $user = Role::create([
+            'name' => 'user',
+            'display_name' => 'user',
+            'description' => 'Customer that using the app',
         ]);
     }
 }

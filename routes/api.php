@@ -13,13 +13,18 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['middleware' => 'api', 'namespace' => 'Api\User'], function () {
-    Route::get('login', 'AuthController@login');
+Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     Route::post('register', 'AuthController@register');
+    Route::post('login', 'AuthController@login');
+
 });
 
-Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => 'Api\User'], function () {
-    Route::post('logout','AuthController@logout');
+Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => 'Api'], function () {
+    Route::get('logout', 'AuthController@logout');
+    Route::get('user', 'AuthController@getAuthUser');
+    
+    Route::apiResource('categories', 'CategoryController@index');
+    Route::post('add-category', 'CategoryController@store');
 
 });
 

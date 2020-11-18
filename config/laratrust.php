@@ -73,7 +73,7 @@ return [
     |
     */
     'user_models' => [
-        'users' => \App\Models\Admin::class,
+        'users' => \App\Models\User::class,
     ],
 
     /*
@@ -117,9 +117,9 @@ return [
          */
         'teams' => 'teams',
 
-        'role_user' => 'role_admin',
+        'role_user' => 'role_user',
 
-        'permission_user' => 'permission_admin',
+        'permission_user' => 'permission_user',
 
         'permission_role' => 'permission_role',
     ],
@@ -136,7 +136,7 @@ return [
         /**
          * User foreign key on Laratrust's role_user and permission_user tables.
          */
-        'user' => 'admin_id',
+        'user' => 'user_id',
 
         /**
          * Role foreign key on Laratrust's role_user and permission_role tables.
