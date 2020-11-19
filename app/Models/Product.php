@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Product extends Model
 {
     protected $guarded =[];
     public $timestamps = true;
@@ -22,10 +22,12 @@ class Category extends Model
 
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function advertiser(){
+        return $this ->belongsTo(User::class, 'user_id', 'id');
     }
-    public function products(){
-        return $this ->hasMany(Product::class);
+
+    public function category(){
+        return $this ->belongsTo(Category::class, 'category_id','id');
     }
+
 }

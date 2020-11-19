@@ -31,5 +31,9 @@ Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => '
     Route::post('delete-category/{id}', 'CategoryController@destroy');
     ///////////////////  End Category Route /////////////////////
 
+    /////////////////////  Product Route ///////////////////////
+    Route::get('products', 'ProductController@index');
+
+
 });
 
