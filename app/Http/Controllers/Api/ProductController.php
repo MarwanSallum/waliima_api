@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiGeneralTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -33,9 +35,30 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        if(auth() ->user()-> hasRole('super_admin')){
+
+            $imagePath = $this ->uploadImage('products',$request ->image);
+
+            try{
+                $new_product = Product::create([
+                    'user_id' => $this ->getAuthenticatedUser(),
+                    'category_id' => $request ->category_id,
+                    'name' => $request ->name,
+                    'image' => $imagePath,
+                    'description' => $request ->description,
+                    'price' =>$request->price,
+                    'weight' =>$request->weight,
+                ]);
+                $new_product ->save();
+                return new ProductResource($new_product);
+
+            }catch(\ReflectionException $ex){
+                return $this ->returnError(404,'يوجد خطأ ما برجاء المحاولة لاحقا');
+            }
+        }
+        return $this -> returnError(401, 'أنت غير مصرح لك بإضافة منتج جديد  ');
     }
 
     /**
