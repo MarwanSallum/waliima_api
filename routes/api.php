@@ -34,6 +34,8 @@ Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => '
     /////////////////////  Product Route ///////////////////////
     Route::get('products', 'ProductController@index');
     Route::post('add-product', 'ProductController@store');
+    Route::get('product/{product}', 'ProductController@show');
+    Route::post('update-product/{product}', 'ProductController@update');
 
 
 });
