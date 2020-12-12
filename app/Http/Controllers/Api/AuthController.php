@@ -25,7 +25,7 @@ class AuthController extends Controller
     return $this->respondWithToken($token);
   }
     public function login(Request $request){
-      $credentials = $request->only(['email', 'password']);
+      $credentials = $request->only(['mobile', 'password']);
 
       if (!$token = auth()->attempt($credentials)) {
         return response()->json(['error' => 'غير مسجل'], 401);
@@ -48,5 +48,9 @@ class AuthController extends Controller
         'token_type' => 'bearer',
         'expires_in' => auth()->factory()->getTTL() * 60
       ]);
+    }
+
+    public function checkUserExists(){
+      
     }
 }
