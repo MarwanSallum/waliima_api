@@ -35,7 +35,12 @@ Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => '
 
     //////////////////// Cart Route ///////////////////////////////
     Route::get('cart','CartController@store');
-    Route::get('cart/{cartKey}','CartController@show');
+    Route::get('cart/{cart}','CartController@show');
+    Route::post('cart/{cart}', 'CartController@addProducts');
+    Route::post('cart/{cart}/checkout', 'CartController@checkout');
+
+    ////////////////// Order Route ////////////////////////////////
+    Route::get('orders', 'OrderController@index');
 
 
 
