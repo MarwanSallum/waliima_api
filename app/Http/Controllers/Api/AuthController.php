@@ -25,7 +25,7 @@ class AuthController extends Controller
     return $this->respondWithToken($token);
   }
     public function login(Request $request){
-      $credentials = $request->only(['mobile', 'password']);
+      $credentials = $request->only(['email', 'password']);
 
       if (!$token = auth()->attempt($credentials)) {
         return response()->json(['error' => 'غير مسجل'], 401);

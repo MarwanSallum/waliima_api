@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login')->name('json.login');
+        Route::get('add-to-cart/{product}', 'CartController@addToCart');
+
 
 });
 
@@ -25,17 +27,16 @@ Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => '
     
     ///////////////////// ADMIN SECTION ////////////////////////
 
-    /////////////////////  Category Route ///////////////////////
-    Route::get('categories', 'CategoryController@index');
-    Route::post('add-category', 'CategoryController@store');
-    Route::post('delete-category/{id}', 'CategoryController@destroy');
-    ///////////////////  End Category Route /////////////////////
-
     /////////////////////  Product Route ///////////////////////
     Route::get('products', 'ProductController@index');
     Route::post('add-product', 'ProductController@store');
     Route::get('product/{product}', 'ProductController@show');
     Route::post('update-product/{product}', 'ProductController@update');
+
+    //////////////////// Cart Route ///////////////////////////////
+    Route::get('cart','CartController@store');
+    Route::get('cart/{cartKey}','CartController@show');
+
 
 
 });
