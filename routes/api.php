@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login')->name('json.login');
-        Route::get('add-to-cart/{product}', 'CartController@addToCart');
-
-
+    Route::get('add-to-cart/{product}', 'CartController@addToCart');
 });
 
 Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => 'Api'], function () {
@@ -41,6 +39,15 @@ Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => '
 
     ////////////////// Order Route ////////////////////////////////
     Route::get('orders', 'OrderController@index');
+    Route::get('order/{order}', 'OrderController@show');
+
+    ///////////////// Mutual Cart Route //////////////////////////
+    Route::get('mutual-cart', 'MutualcartController@store');
+    Route::get('mutual-cart/{cart}', 'MutualcartController@show');
+    Route::post('mutual-cart/{cart}', 'MutualcartController@addProducts');
+    Route::get('find-cart', 'MutualcartController@findCart');
+    Route::post('join-cart/{cart}', 'MutualcartController@joinToCart');
+
 
 
 

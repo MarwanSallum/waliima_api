@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Cart;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AdvertiserResource extends JsonResource
+class CreateNewCartResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +15,9 @@ class AdvertiserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'name' => $this->name
+            'message' => 'تم إنشاء عربة تسوق جديدة',
+            'cartToken' => $this->id,
+            'cartKey' => $this->key,
         ];
     }
 }

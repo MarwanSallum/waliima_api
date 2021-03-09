@@ -18,8 +18,6 @@ class CreateOrdersTable extends Migration
             $table->json('products');
             $table->decimal('total_price')->default(0.0);
             $table->unsignedinteger('user_id')->nullable();
-            $table->string('name');
-            $table->text('address');
             $table->string('transaction_id');
             $table->timestamps();
         });

@@ -10,9 +10,11 @@ trait ApiGeneralTrait
     public function returnError($errorNum, $msg)
     {
         return response() -> json([
-            'status' => 404,
-            'error' => $errorNum,
-            'message' => $msg,
+            'data' => [
+                'error' => $errorNum,
+                'message' => $msg,
+                'status_code' => 404,
+            ]
         ]);
 
     }
@@ -20,8 +22,10 @@ trait ApiGeneralTrait
     public function returnSuccessMessage($msg="")
     {
         return response() -> json([
-            'status' => 200,
-            'message' => $msg,
+            'data' => [
+                'message' => $msg,
+                'status_code' => 200,
+            ]
         ]);
 
     }

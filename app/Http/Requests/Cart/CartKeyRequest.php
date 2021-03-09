@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class CartKeyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,14 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:categories,name,'. $this -> id,
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'cartKey' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'يجب إدخال إسم القسم',
-            'name.unique' => 'هذا القسم موجود بالفعل',
-            'image.required' => 'يجب إرفاق صورة للقسم',
-
+            'cartKey.required' => 'مفتاح التعريف للسلة إلزامي',
         ];
     }
 }
