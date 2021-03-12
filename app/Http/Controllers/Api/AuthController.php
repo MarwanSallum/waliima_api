@@ -25,7 +25,7 @@ class AuthController extends Controller
     return $this->respondWithToken($token);
   }
     public function login(Request $request){
-      $credentials = $request->only(['email', 'password']);
+      $credentials = $request->only(['mobile', 'password']);
 
       if (!$token = auth()->attempt($credentials)) {
         return response()->json(['error' => 'غير مسجل'], 401);
@@ -42,11 +42,13 @@ class AuthController extends Controller
     }
     protected function respondWithToken($token){
       return response()->json([
-        'id' => auth()->user()->id,
-        'role' => auth()->user()->roles->first()->name,
-        'access_token' => $token,
-        'token_type' => 'bearer',
-        'expires_in' => auth()->factory()->getTTL() * 60
+        'data' => [
+          'id' => auth()->user()->id,
+          'role' => auth()->user()->roles->first()->name,
+          'access_token' => $token,
+          'token_type' => 'bearer',
+          'expires_in' => auth()->factory()->getTTL() * 60
+        ]
       ]);
     }
 
