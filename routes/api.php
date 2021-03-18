@@ -17,6 +17,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login')->name('json.login');
     Route::get('add-to-cart/{product}', 'CartController@addToCart');
+    Route::post('auth', 'AuthController@auth');
+    Route::post('send-otp', 'AuthController@sendOtp');
 });
 
 Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => 'Api'], function () {
