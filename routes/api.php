@@ -21,7 +21,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
     Route::post('send-otp', 'AuthController@sendOtp');
 });
 
-Route::group(['middleware' => ['api','checkUserToken:user-api'],'namespace' => 'Api'], function () {
+Route::group(['middleware' => ['api','auth:sanctum'],'namespace' => 'Api'], function () {
     Route::get('logout', 'AuthController@logout');
     Route::get('user', 'AuthController@getAuthUser');
     

@@ -7,19 +7,29 @@ use Illuminate\Http\Request;
 use App\Helpers\ApiGeneralTrait;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Service\SmsGateways\MsegatGateway;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Service\VerificationServices;
 
 class AuthController extends Controller
 {
   use ApiGeneralTrait;
+
+    public function __construct(VerificationServices $verificationServices )
+    {
+      $this->middleware('guest');
+      $this->verificationServices = $verificationServices;
+      
+    }
   
     public function auth(Request $request){
       Log::info($request);
       $user  = User::where([['mobile','=',request('mobile')],['otp','=',request('otp')]])->first();
       if( $user){
-          Auth::login($user, true);
-          User::where('mobile','=',$request->mobile)->update(['otp' => null, 'verified' => true, 'logged_in' => true]);
-          return $this->returnSuccessMessage('تم تسجيل الدخول بنجاح');
+          $token = $user->createToken('auth-access')->plainTextToken;
+          User::where('mobile','=',$request->mobile)
+          ->update(['otp' => null, 'verified' => true, 'logged_in' => true, 'logrred_in_at' => now()]);
+          return $this->returnToken($token);
       }
       else{
           return $this->returnError(404, 'رمز التحقق غير صحيح');
@@ -27,31 +37,22 @@ class AuthController extends Controller
     }
 
     public function sendOtp(Request $request){
-      if($user =User::where('mobile', $request->mobile)->where( 'verified', true)->first()){
-        Auth::login($user, true);
-        User::where('mobile','=',$request->mobile)->update([ 'logged_in' => true]);
-        return $this->returnSuccessMessage('تم تسجيل الدخول بنجاح');
+      // check if user already verified. direct take him token without send OTP
+      $verifiedUser = User::where('mobile', $request->mobile)->where( 'verified', true)->first();
+      if($verifiedUser){
+        $token = $verifiedUser->createToken('auth-access')->plainTextToken;
+        $verifiedUser->update([ 'logged_in' => true]);
+        return $this->returnToken($token);
       }else{
-        $otp = rand(1000,9999);
-        Log::info("otp = ".$otp);
-        $user = User::where('mobile','=',$request->mobile)->first();
-        try{
-          if(!$user){
-            $newUser = User::create([
-              'mobile' => $request->mobile,
-              'otp' => $otp,
-            ]);
-            $newUser->save();
-              // send otp to mobile no using sms api
-            return $this->returnSuccessMessage('تم إنشاء حساب جديد وإرسال رمز التفعيل إلى هاتفك');
-          }else{
-            $user->update(['otp' => $otp]);
-            // send otp to mobile no using sms api
-            return $this->returnSuccessMessage('تم إرسال رمز التفعيل إلى رقم هاتفك');
-          }
-        }catch(\Exception $ex){
-          return $this->returnError(404, 'حدث خطأ ما - يرجى المحاولة فيما بعد');
-        }
+          $verification = [];
+          $verification['mobile'] = $request->mobile;
+          $this->verificationServices->setVerificationCode($verification);
+          $user = User::where('mobile', $request->mobile)->first();
+
+          // this work after activate the SMS Gateway
+          // $message = $this->verificationServices->getSmsVerificationMessage($user->otp);
+          // app(MsegatGateway::class)->sendSms($request->mobile, $message);
+
       }
   }
 }

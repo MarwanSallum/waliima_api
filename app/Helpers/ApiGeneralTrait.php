@@ -30,6 +30,17 @@ trait ApiGeneralTrait
 
     }
 
+    public function returnToken($token="")
+    {
+        return response() -> json([
+            'data' => [
+                'access_token' => $token,
+                'status_code' => 200,
+            ]
+        ]);
+
+    }
+
     public function returnData($key, $value, $msg="")
     {
         return response() -> json([

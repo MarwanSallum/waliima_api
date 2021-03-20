@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('otp')->nullable();
             $table->boolean('verified')->default(false);
             $table->boolean('logged_in')->default(false);
+            $table->timestamp('logrred_in_at')->nullable();
             $table->string('city')->nullable();
             $table->string('avatar')->nullable();
 
