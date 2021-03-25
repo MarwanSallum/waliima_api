@@ -22,21 +22,21 @@ class VerificationServices
                     'otp' => $data['otp'],
                 ]);
                 $newUser->save();
-                return $newUser;
+                return $this->returnSuccessMessage('New Account Created with OTP code sent to your Mobile');
             }
             // if user in DB update otp
             else{
                 $user->update(['otp' => $data['otp']]);
-                return $user;
+                return $this->returnSuccessMessage('OTP code sent to your Mobile');
             }
         }catch(\Exception $ex){
-            return $this->returnError(404, 'حدث خطأ ما - يرجى المحاولة فيما بعد');
+            return $this->returnError(404, 'There is an Error');
         }
     }
 
-    public function getSmsVerificationMessage($otp)
-    {
-        $message =  $otp.":رمز التحقق \nمرحبا بك في تطبيق وليمة";
-        return $message;
-    }
+    // public function getSmsVerificationMessage($otp)
+    // {
+    //     $message =  $otp.":رمز التحقق \nمرحبا بك في تطبيق وليمة";
+    //     return $message;
+    // }
 }

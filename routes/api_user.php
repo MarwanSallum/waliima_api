@@ -13,15 +13,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['middleware' => 'api', 'namespace' => 'Api'], function () {
-    Route::post('register', 'AuthController@register');
-    Route::post('login', 'AuthController@login')->name('json.login');
-    Route::get('add-to-cart/{product}', 'CartController@addToCart');
+Route::group(['middleware' => 'api', 'namespace' => 'UserApi', 'prefix' => 'user'], function () {
     Route::post('auth', 'AuthController@auth');
     Route::post('send-otp', 'AuthController@sendOtp');
 });
 
-Route::group(['middleware' => ['api','auth:sanctum'],'namespace' => 'Api'], function () {
+Route::group(['middleware' => ['api','auth:sanctum'],'namespace' => 'UserApi'], function () {
     Route::get('logout', 'AuthController@logout');
     Route::get('user', 'AuthController@getAuthUser');
     

@@ -30,12 +30,13 @@ trait ApiGeneralTrait
 
     }
 
-    public function returnToken($token="")
+    public function returnToken($token="", $userId)
     {
         return response() -> json([
             'data' => [
+                'id' => $userId,
                 'access_token' => $token,
-                'status_code' => 200,
+                'expires_in' => auth()->factory()->getTTL() * 60,
             ]
         ]);
 
