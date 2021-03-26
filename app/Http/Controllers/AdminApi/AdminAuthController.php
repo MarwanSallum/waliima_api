@@ -28,7 +28,7 @@ class AdminAuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth('admin-api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'غير مفوض بالدخول'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -53,7 +53,7 @@ class AdminAuthController extends Controller
     {
         auth('admin-api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'تم تسجيل الدخول بنجاح']);
     }
 
     /**

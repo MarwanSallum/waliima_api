@@ -11,11 +11,9 @@ trait ApiGeneralTrait
     {
         return response() -> json([
             'data' => [
-                'error' => $errorNum,
                 'message' => $msg,
-                'status_code' => 404,
             ]
-        ]);
+            ],$errorNum);
 
     }
 

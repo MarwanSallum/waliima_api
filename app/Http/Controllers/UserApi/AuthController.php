@@ -5,11 +5,9 @@ namespace App\Http\Controllers\UserApi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helpers\ApiGeneralTrait;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Service\SmsGateways\MsegatGateway;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Service\VerificationServices;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -17,19 +15,9 @@ class AuthController extends Controller
 
     public function __construct(VerificationServices $verificationServices )
     {
-      $this->middleware('guest');
+      $this->middleware('auth:api', ['except' => ['auth', 'sendOtp']]);
       $this->verificationServices = $verificationServices;
       
-    }
-  
-    public function auth(Request $request){
-
-      $credentials = request(['mobile', 'otp']);
-
-      if( !$token = auth('user-api')->attempt($credentials)){
-        return response()->json(['error' => 'Unauthorized'], 401);
-      }
-      return $this->respondWithToken($token);
     }
 
     public function sendOtp(Request $request){
@@ -45,23 +33,31 @@ class AuthController extends Controller
                     'otp' => $data['otp'],
                 ]);
                 $newUser->save();
-                return $this->returnSuccessMessage('New Account Created with OTP code sent to your Mobile');
+                return $this->returnSuccessMessage('تم إنشاء حساب جديد وإرسال رمز التفعيل إلى رقم هاتفك');
             }
             // if user in DB update otp
             else{
                 $user->update(['otp' => $data['otp']]);
-                return $this->returnSuccessMessage('OTP code sent to your Mobile');
+                return $this->returnSuccessMessage('تم إرسال رمز التفعيل إلى رقم هاتفك');
             }
         }catch(\Exception $ex){
-            return $this->returnError(404, 'There is an Error');
+            return $this->returnError(404, 'لم تتم العملية - يوجد خطأ ما');
         }
-          // $verification = [];
-          // $verification['mobile'] = $request->mobile;
-          // $this->verificationServices->setVerificationCode($verification);
-          // this work after activate the SMS Gateway
-          // $message = $this->verificationServices->getSmsVerificationMessage($user->otp);
-          // app(MsegatGateway::class)->sendSms($request->mobile, $message);
   }
+
+    
+  public function auth(Request $request){
+    $user  = User::where([['mobile','=',$request->mobile],['otp','=',$request->otp]])->first();
+    if( $user){
+        $token = $user->createToken('auth-access')->plainTextToken;
+        $user->update(['otp' => null, 'verified' => true, 'logged_in' => true, 'logged_in_at' => now()]);
+        return $this->respondWithToken($token);
+    }
+    else{
+        return $this->returnError(404, 'رمز التفعيل غير صحيح');
+    }
+  }
+
 
   protected function respondWithToken($token)
   {
@@ -69,9 +65,7 @@ class AuthController extends Controller
           'data' => [
               'access_token' => $token,
               'token_type' => 'bearer',
-              'expires_in' => auth('user-api')->factory()->getTTL() * 60
           ]
-      
           ], 200);
   }
 }
