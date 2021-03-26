@@ -24,15 +24,12 @@ class AuthController extends Controller
   
     public function auth(Request $request){
 
-      $user  = User::where([['mobile','=',$request->mobile],['otp','=',$request->otp]])->first();
-      if( $user){
-          $token = $user->createToken('auth-access')->plainTextToken;
-          $user->update(['otp' => null, 'verified' => true, 'logged_in' => true, 'logrred_in_at' => now()]);
-          return $this->returnToken($token , $user->id);
+      $credentials = request(['mobile', 'otp']);
+
+      if( !$token = auth('user-api')->attempt($credentials)){
+        return response()->json(['error' => 'Unauthorized'], 401);
       }
-      else{
-          return response('not authentcation',404);
-      }
+      return $this->respondWithToken($token);
     }
 
     public function sendOtp(Request $request){
@@ -64,5 +61,17 @@ class AuthController extends Controller
           // this work after activate the SMS Gateway
           // $message = $this->verificationServices->getSmsVerificationMessage($user->otp);
           // app(MsegatGateway::class)->sendSms($request->mobile, $message);
+  }
+
+  protected function respondWithToken($token)
+  {
+      return response()->json([
+          'data' => [
+              'access_token' => $token,
+              'token_type' => 'bearer',
+              'expires_in' => auth('user-api')->factory()->getTTL() * 60
+          ]
+      
+          ], 200);
   }
 }

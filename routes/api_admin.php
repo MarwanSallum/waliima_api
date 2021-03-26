@@ -20,6 +20,8 @@ Route::group(['namespace' => 'AdminApi', 'prefix' => 'admin'], function () {
 
 Route::group(['middleware' => ['api', 'checkAdminToken:admin-api'], 'namespace' => 'AdminApi', 'prefix' => 'admin'], function () {
     Route::post('me', 'AdminAuthController@me');
+    Route::post('refresh', 'AdminAuthController@refresh');
+    Route::post('logout', 'AdminAuthController@logout');
 });
 
 

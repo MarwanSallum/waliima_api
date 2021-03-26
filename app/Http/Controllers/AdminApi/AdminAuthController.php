@@ -15,7 +15,7 @@ class AdminAuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:admin-api', ['except' => ['login']]);
     }
 
     /**
