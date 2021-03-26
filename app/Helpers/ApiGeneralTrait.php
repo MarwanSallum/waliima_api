@@ -30,18 +30,6 @@ trait ApiGeneralTrait
 
     }
 
-    public function returnToken($token="", $userId)
-    {
-        return response() -> json([
-            'data' => [
-                'id' => $userId,
-                'access_token' => $token,
-                'expires_in' => auth()->factory()->getTTL() * 60,
-            ]
-        ]);
-
-    }
-
     public function returnData($key, $value, $msg="")
     {
         return response() -> json([
@@ -52,16 +40,6 @@ trait ApiGeneralTrait
 
     }
 
-    protected function respondWithToken($user,$token)
-    {
-    return response()->json([
-        'user' => $user,
-        'access_token' => $token,
-        'token_type' => 'bearer',
-        'expires_in' => auth()->factory()->getTTL() * 60
-    ]);
-    }
-
     public function uploadImage($folder, $image){
         $image -> store('/', $folder);
         $filename = $image -> hashName();
@@ -69,23 +47,23 @@ trait ApiGeneralTrait
         return $path;
     }
 
-    public function getAuthenticatedUser()
-{
-    try {
-        if (! $user = JWTAuth::parseToken()->authenticate()) {
-            return response()->json(['هذا المستخدم غير موجود'], 404);
-        }
-    } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-        return response()->json(['token_expired'], $e->getStatusCode());
-    } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-        return response()->json(['token_invalid'], $e->getStatusCode());
-    } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-        return response()->json(['token_absent'], $e->getStatusCode());
-    }
+//     public function getAuthenticatedUser()
+// {
+//     try {
+//         if (! $user = JWTAuth::parseToken()->authenticate()) {
+//             return response()->json(['هذا المستخدم غير موجود'], 404);
+//         }
+//     } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+//         return response()->json(['token_expired'], $e->getStatusCode());
+//     } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+//         return response()->json(['token_invalid'], $e->getStatusCode());
+//     } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+//         return response()->json(['token_absent'], $e->getStatusCode());
+//     }
 
-    return $user->id;
+//     return $user->id;
 
-}
+// }
 
 
     public function returnValidationError($code = "E001", $validator)

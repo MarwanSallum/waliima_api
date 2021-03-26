@@ -18,9 +18,9 @@ class CheckAdminToken
     */
     public function handle($request, Closure $next)
     {
-        $user = null;
+        $admin = null;
         try {
-            $user = JWTAuth::parseToken()->authenticate();
+            $admin = JWTAuth::parseToken()->authenticate();
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
                 return $this -> returnError('E3001','INVALID_TOKEN');
@@ -39,7 +39,7 @@ class CheckAdminToken
             }
         }
 
-        if (!$user)
+        if (!$admin)
         $this -> returnError(404, 'Unauthenticated');
         return $next($request);
     }

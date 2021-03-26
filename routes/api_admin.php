@@ -14,11 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::group(['namespace' => 'AdminApi', 'prefix' => 'admin'], function () {
-    Route::post('admin-login', 'AdminAuthController@adminLogin');
+    Route::post('login', 'AdminAuthController@login');
+    
 });
 
 Route::group(['middleware' => ['api', 'checkAdminToken:admin-api'], 'namespace' => 'AdminApi', 'prefix' => 'admin'], function () {
-    Route::get('test', 'AdminAuthController@test');
+    Route::post('me', 'AdminAuthController@me');
 });
 
 
