@@ -18,14 +18,12 @@ Route::group(['namespace' => 'UserApi', 'prefix' => 'user'], function () {
     Route::post('send-otp', 'AuthController@sendOtp');
 });
 
-Route::group(['middleware' => ['auth:sanctum'],'namespace' => 'UserApi'], function () {
+Route::group(['namespace' => 'UserApi', 'prefix' => 'user', 'middleware' => ['auth:sanctum'],], function () {
     Route::get('user', 'AuthController@getAuthUser');
     
     /////////////////////  Product Route ///////////////////////
     Route::get('products', 'ProductController@index');
-    Route::post('add-product', 'ProductController@store');
     Route::get('product/{product}', 'ProductController@show');
-    Route::post('update-product/{product}', 'ProductController@update');
 
     //////////////////// Cart Route ///////////////////////////////
     Route::get('cart','CartController@store');
