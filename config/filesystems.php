@@ -55,13 +55,6 @@ return [
             'visibility' => 'public',
         ],
 
-        'categories' => [
-            'driver' => 'local',
-            'root' => public_path(). '/images/categories/',
-            'url' => env('APP_URL').'/public',
-            'visibility' => 'public',
-        ],
-
         'products' => [
             'driver' => 'local',
             'root' => public_path(). '/images/products/',

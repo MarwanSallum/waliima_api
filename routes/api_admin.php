@@ -22,6 +22,14 @@ Route::group(['middleware' => ['api', 'checkAdminToken:admin-api'], 'namespace' 
     Route::post('me', 'AdminAuthController@me');
     Route::post('refresh', 'AdminAuthController@refresh');
     Route::post('logout', 'AdminAuthController@logout');
+    //---------------- Product Route ------------------------//
+    Route::get('products', 'AdminProductController@index');
+    Route::post('product', 'AdminProductController@store');
+    Route::get('product/{product}', 'AdminProductController@show');
+    Route::post('product/{product}', 'AdminProductController@update');
+    Route::delete('delete/{product}', 'AdminProductController@destroy');
+    //-------------------------------------------------------//
+
 });
 
 

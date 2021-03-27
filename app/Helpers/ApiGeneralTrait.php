@@ -31,9 +31,10 @@ trait ApiGeneralTrait
     public function returnData($key, $value, $msg="")
     {
         return response() -> json([
-            'status' => 200,
-            'message' => $msg,
-            $key => $value,
+            'data' => [
+                'message' => $msg,
+                $key => $value,
+            ]
         ]);
 
     }
