@@ -63,8 +63,12 @@ class AdminProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::find($id);
+        if (!$product) {
+            return $this->returnError(404, 'هذا المنتج غير موجود بالسجل');
+        }
         return new ProductResource($product);
     }
 
@@ -80,18 +84,19 @@ class AdminProductController extends Controller
 
         try {
             DB::beginTransaction();
-            $product = Product::find($id);
+            $product = Product::where('id', $id)->first();
+            $addNewFile = '';
             if (!$product) {
                 return $this->returnError(404, 'هذا المنتج غير موجود بالسجل');
             }
-            $addNewFile = '';
             if ($request->has('image')) {
                 $storgedImage = Str::after($product->image, 'products/');
-                $oldImage = public_path('assets/image/products/' . $storgedImage);
+                $oldImage = public_path("images\\products\\" . $storgedImage);
                 unlink($oldImage);
                 $addNewFile = $this->uploadImage('products', $request->image);
             }
-            $product::update([
+
+            $product->update([
                 'title' => $request->has('title') ?  $request->title : $product->title,
                 'description' => $request->has('description') ? $request->description : $product->description,
                 'price' => $request->has('price') ?  $request->price : $product->price,
@@ -105,7 +110,9 @@ class AdminProductController extends Controller
             return $this->returnSuccessMessage('تم تحديث المنتج بنجاح');
         } catch (\Exception $ex) {
             DB::rollback();
-            return $this->returnError(404, 'لم تتم العملية - يوجد خطأ ما');
+            return $this->returnError(404, $ex);
+            // return $this->returnError(404, 'لم تتم العملية - يوجد خطأ ما');
+
         }
     }
 
