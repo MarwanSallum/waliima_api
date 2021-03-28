@@ -62,11 +62,9 @@ class AuthController extends Controller
   protected function respondWithToken($token, $userID)
   {
       return response()->json([
-          'data' => [
               'id' => $userID,
               'access_token' => $token,
               'token_type' => 'bearer',
-          ]
           ], 200);
   }
 }

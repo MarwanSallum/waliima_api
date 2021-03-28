@@ -76,13 +76,10 @@ class AdminAuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'data' => [
                 'id' => auth('admin-api')->user()->id,
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => auth('admin-api')->factory()->getTTL() * 60
-            ]
-        
             ], 200);
     }
 }
