@@ -51,7 +51,7 @@ class AuthController extends Controller
     if( $user){
         $token = $user->createToken('auth-access')->plainTextToken;
         $user->update(['otp' => null, 'verified' => true, 'logged_in' => true, 'logged_in_at' => now()]);
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $user->id);
     }
     else{
         return $this->returnError(404, 'رمز التفعيل غير صحيح');
@@ -59,10 +59,11 @@ class AuthController extends Controller
   }
 
 
-  protected function respondWithToken($token)
+  protected function respondWithToken($token, $userID)
   {
       return response()->json([
           'data' => [
+              'id' => $userID,
               'access_token' => $token,
               'token_type' => 'bearer',
           ]
