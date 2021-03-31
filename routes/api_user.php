@@ -24,7 +24,10 @@ Route::group(['namespace' => 'UserApi', 'prefix' => 'user', 'middleware' => ['au
     /////////////////////  Product Route ///////////////////////
     Route::get('products', 'ProductController@index');
     Route::get('product/{product}', 'ProductController@show');
-
+    //---------------- Advertis Route ------------------------//
+    Route::get('advertis/all', 'AdvertisementController@index');
+    Route::get('advertis/show/{advertis}', 'AdvertisementController@show');
+    
     //////////////////// Cart Route ///////////////////////////////
     Route::get('cart','CartController@store');
     Route::get('cart/{cart}','CartController@show');

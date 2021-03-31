@@ -30,6 +30,12 @@ Route::group(['middleware' => ['api', 'checkAdminToken:admin-api'], 'namespace' 
     Route::delete('delete/{product}', 'AdminProductController@destroy');
     //-------------------------------------------------------//
 
+    //---------------- Advertis Route ------------------------//
+    Route::get('advertis/all', 'AdminAdvertisementController@index');
+    Route::post('advertis/add', 'AdminAdvertisementController@store');
+    Route::get('advertis/show/{advertis}', 'AdminAdvertisementController@show');
+    Route::post('advertis/update/{advertis}', 'AdminAdvertisementController@update');
+    Route::delete('advertis/delete/{advertis}', 'AdminAdvertisementController@destroy');
 });
 
 
