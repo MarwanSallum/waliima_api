@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\UserApi;
 
 use App\Models\Product;
-use App\Models\Category;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Helpers\ApiGeneralTrait;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
-use Illuminate\Database\Eloquent\Model;
+use App\Repositories\ProductRepository;
+use Exception;
+use Illuminate\Support\Facades\Request;
 
 class ProductController extends Controller
 {
     use ApiGeneralTrait;
+
+    protected $repository;
+
+    public function __construct(ProductRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * Display a listing of the resource.
@@ -23,7 +28,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(5);
+        $products = $this->repository->paginate();
         return ProductResource::collection($products);
     }
 
@@ -35,11 +40,12 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::find($id);
-        if (!$product) {
+        try{
+            $product = $this->repository->show($id);
+            return new ProductResource($product);
+        }catch(Exception $e){
             return $this->returnError(404, 'هذا المنتج غير موجود بالسجل');
         }
-        return new ProductResource($product);
     }
 
 }

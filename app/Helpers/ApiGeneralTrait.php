@@ -1,7 +1,10 @@
 <?php
 namespace App\Helpers;
 
+use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
 trait ApiGeneralTrait
@@ -44,6 +47,12 @@ trait ApiGeneralTrait
         $filename = $image -> hashName();
         $path = 'images/' . $folder . '/' . $filename;
         return $path;
+    }
+
+    public function removeImage(Model $model, String $fileName){
+        $storgedImage = Str::after($model->image, $fileName.'/');
+        $oldImage = public_path("images\\".$fileName."\\". $storgedImage);
+        unlink($oldImage);
     }
 
 //     public function getAuthenticatedUser()
