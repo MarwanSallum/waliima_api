@@ -67,6 +67,16 @@ class AdminProductController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        try{
+            $this->repository->updateProduct($request, $id);
+            return $this->returnSuccessMessage('تم تحديث المنتج بنجاح');
+        }catch(Exception $e){
+            return $this->returnError(404, 'حدث خطأ ما - لم يتم التحديث');
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

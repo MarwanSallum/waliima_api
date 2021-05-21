@@ -32,14 +32,14 @@ class AppRepository
         return $item;
     }
 
-    // public function update($id, Request $request)
-    // {
-    //     $data = $this->setDataPayload($request, $id);
-    //     $item = $this->model->findOrFail($id);
-    //     $item->fill($data);
-    //     $item->save();
-    //     return $item;
-    // }
+    public function update($id, Request $request)
+    {
+        $data = $this->setDataPayload($request);
+        $item = $this->model->findOrFail($id);
+        $item->fill($data);
+        $item->save();
+        return $item;
+    }
 
     public function show($id)
     {
