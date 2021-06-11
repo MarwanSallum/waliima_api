@@ -36,6 +36,12 @@ Route::group(['middleware' => ['api', 'checkAdminToken:admin-api'], 'namespace' 
     Route::get('advertis/show/{advertis}', 'AdminAdvertisementController@show');
     Route::post('advertis/update/{advertis}', 'AdminAdvertisementController@update');
     Route::delete('advertis/delete/{advertis}', 'AdminAdvertisementController@destroy');
+
+     //---------------- Special Offers Route ------------------------//
+    Route::get('special-offers/all', 'SpecialOfferController@index');
+    Route::post('special-offer/add', 'SpecialOfferController@store');
+
+    
 });
 
 
