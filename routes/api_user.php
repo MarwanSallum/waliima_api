@@ -24,6 +24,9 @@ Route::group(['namespace' => 'UserApi', 'prefix' => 'user', 'middleware' => ['au
     /////////////////////  Product Route ///////////////////////
     Route::get('products', 'ProductController@index');
     Route::get('product/{product}', 'ProductController@show');
+
+    ///////////////// Special Offers Route //////////////////////////
+    Route::get('special-offers/all', 'SpecialOfferController@index');
     //---------------- Advertis Route ------------------------//
     Route::get('advertis/all', 'AdvertisementController@index');
     Route::get('advertis/show/{advertis}', 'AdvertisementController@show');

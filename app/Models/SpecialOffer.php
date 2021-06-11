@@ -14,4 +14,10 @@ class SpecialOffer extends Model
         'offer_begin',
         'offer_end',
     ];
+
+    public function getImageAttribute($val)
+    {
+        return ($val !== null) ? asset($val) : "";
+
+    }
 }
